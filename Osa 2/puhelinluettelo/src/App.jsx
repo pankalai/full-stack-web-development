@@ -86,24 +86,29 @@ const App = () => {
   // Update or addition
   const notExists = () => {
     const personObject = {name : newName, number: newNumber}
-
     personService
       .create(personObject)
-      .then(returnedPerson => {setPersons(persons.concat(returnedPerson))})
-      .then(clearForm())
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+        clearForm()
+      })
       .then(notify(`Added ${newName}`, true))
       .catch(error => notify(error.response.data.error, false))
   }
+  
   const exists = (person) => {
     const personObject = {...person, number: newNumber}
     confirm(`${newName} is already added to phonebook, replace the old number with a new one?`) &&
     personService
       .update(personObject)
-      .then(updatedPerson => {setPersons(persons.map(p => p.id !== person.id ? p : updatedPerson))})
-      .then(clearForm())
+      .then(updatedPerson => {
+        setPersons(persons.map(p => p.id !== person.id ? p : updatedPerson))
+        clearForm()
+      })
       .then(notify(`Updated ${newName}`, true))
-      .catch(error => notify(`Information of ${newName} has already been removed from server`, false))
+      .catch(error => notify(error.response.data.error, false))
   }
+  
   const clearForm = () => {
     setNewName('')
     setNewNumber('')
