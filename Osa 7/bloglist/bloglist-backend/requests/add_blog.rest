@@ -1,0 +1,11 @@
+POST http://localhost:3003/api/blogs/
+Content-Type: application/json
+//Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hdHRpIiwiaWQiOiI2NjdlN2ZiZmNiOTVmNjFhYWU5OGViYjYiLCJpYXQiOjE3MTk1ODI4NTl9.PNdjxqcG9meCtJ2vauloxYvR7kMJhvzE6WV6Wt1YENM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBla3NpIiwiaWQiOiI2NjdkYjg0NjVmODVmOTkyYjA5NWIwMzUiLCJpYXQiOjE3MTk5MjYzNjB9.GF_4JxNBq5cXOtgjtOw0KzwYG4bvHIQRZ1GAI_C_3B0
+
+{
+  "title": "blogi99",
+  "author": "Lauri Laurila",
+  "url": "http://blogi.fi",
+  "likes": 5
+}
