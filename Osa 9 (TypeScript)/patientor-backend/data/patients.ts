@@ -1,4 +1,4 @@
-import { toNewPatientEntry } from "../src/services/utils";
+import { toNewPatientEntry } from "../src/utils";
 import { Patient } from "../src/types";
 
 const data = [
