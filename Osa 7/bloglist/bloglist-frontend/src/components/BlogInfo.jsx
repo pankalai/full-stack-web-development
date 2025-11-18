@@ -1,4 +1,3 @@
-import { useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 
 import { likeBlog, commentBlog } from '../reducers/blogReducer'
