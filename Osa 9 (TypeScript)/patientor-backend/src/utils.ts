@@ -1,4 +1,4 @@
-import { NewPatientEntry, Gender } from "./types";
+import { NewPatient, Gender } from "./types";
 import { z } from 'zod';
 
 export const NewPatientSchema = z.object({
@@ -6,9 +6,9 @@ export const NewPatientSchema = z.object({
     dateOfBirth: z.string().refine((d) => !Number.isNaN(Date.parse(d)), { message: 'Invalid date' }),
     ssn: z.string().min(1, { message: 'SSN cannot be empty' }),
     gender: z.enum(Gender),
-    occupation: z.string().min(1, { message: 'Occupation cannot be empty' })
+    occupation: z.string().min(1, { message: 'Occupation cannot be empty' }),
 });
 
-export const toNewPatientEntry = (object: unknown): NewPatientEntry => {
+export const toNewPatient = (object: unknown): NewPatient => {
     return NewPatientSchema.parse(object);
 };

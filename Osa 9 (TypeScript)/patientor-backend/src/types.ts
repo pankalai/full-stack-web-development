@@ -13,6 +13,10 @@ interface Diagnosis {
   latin?: string;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface Entry {
+}
+
 interface Patient {
   id: string;
   name: string;
@@ -20,10 +24,11 @@ interface Patient {
   ssn: string;
   gender: Gender;
   occupation: string;
+  entries: Entry[]
 };
 
-type NonSensitivePatient = Omit<Patient, 'ssn'>;
+type NonSensitivePatient = Omit<Patient, 'ssn' | 'entries'>;
 
-type NewPatientEntry = z.infer<typeof NewPatientSchema>;
+type NewPatient = z.infer<typeof NewPatientSchema>;
 
-export { Diagnosis, Patient, NonSensitivePatient, NewPatientEntry, Gender };
+export { Diagnosis, Patient, NonSensitivePatient, NewPatient, Gender, Entry };
