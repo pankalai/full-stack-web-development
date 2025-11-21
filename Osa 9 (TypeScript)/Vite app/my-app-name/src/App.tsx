@@ -31,6 +31,11 @@ interface CoursePartSpecial extends CoursePartBasicWithDescription {
 
 type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackground | CoursePartSpecial;
 
+const assertNever = (value: never): never => {
+  throw new Error(
+    `Unhandled discriminated union member: ${JSON.stringify(value)}`
+  );
+};
 
 const Header = (props: HeaderProps) => {
   return <h1>{props.courseName}</h1>;
@@ -46,42 +51,55 @@ const Content = (props: { courseParts: CoursePart[] }) => {
   );
 }
 
-const Part = (props: CoursePart) => {
-    switch (props.kind) {
-      case "basic":
-        return (
-          <p>
-            <b>{props.name} {props.exerciseCount}</b><br></br>
-            {props.description}
-          </p>
-        );
-      case "group":
-        return (
-          <p>
-            <b>{props.name} {props.exerciseCount}</b><br></br>
-            Project exercises: {props.groupProjectCount}
-          </p>
-        );
-      case "background":
-        return (
-          <p>
-            <b>{props.name} {props.exerciseCount}</b><br></br>
-            {props.description}<br></br>
-            Background material: {props.backgroundMaterial}
-          </p>
-        );
-      case "special":
-        return (
-          <p>
-            <b>{props.name} {props.exerciseCount}</b><br></br>
-            {props.description}<br></br>
-            Required skills: {props.requirements.join(", ")}
-          </p>
-        );
-      default:
-        return null;
-    }
-}
+const PartContainer: React.FC<{ name: string; count: number; children: React.ReactNode }> =
+({ name, count, children }) => (
+  <p>
+    <b>{name} {count}</b><br />
+    {children}
+  </p>
+);
+
+const BasicPart = ({ name, exerciseCount, description }: CoursePartBasic) => (
+  <PartContainer name={name} count={exerciseCount}>
+    {description}
+  </PartContainer>
+);
+
+const GroupPart = ({ name, exerciseCount, groupProjectCount }: CoursePartGroup) => (
+  <PartContainer name={name} count={exerciseCount}>
+    Project exercises: {groupProjectCount}
+  </PartContainer>
+);
+
+const BackgroundPart = ({ name, exerciseCount, description, backgroundMaterial }: CoursePartBackground) => (
+  <PartContainer name={name} count={exerciseCount}>
+    {description}<br />
+    Background material: {backgroundMaterial}
+  </PartContainer>
+);
+
+const SpecialPart = ({ name, exerciseCount, description, requirements }: CoursePartSpecial) => (
+  <PartContainer name={name} count={exerciseCount}>
+    {description}<br />
+    Required skills: {requirements.join(", ")}
+  </PartContainer>
+);
+
+const Part = (part: CoursePart) => {
+  switch (part.kind) {
+    case "basic":
+      return <BasicPart {...part} />;
+    case "group":
+      return <GroupPart {...part} />;
+    case "background":
+      return <BackgroundPart {...part} />;
+    case "special":
+      return <SpecialPart {...part} />;
+    default:
+      return assertNever(part);
+  }
+};
+
 
 const Total = (props: TotalProps) => {
   return (
