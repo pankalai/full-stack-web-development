@@ -5,21 +5,12 @@ import {
   HealthCheckRating,
   Diagnosis
 } from "../../types";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import ListItemText from "@mui/material/ListItemText/ListItemText";
-import MenuItem from "@mui/material/MenuItem/MenuItem";
-import Checkbox from "@mui/material/Checkbox/Checkbox";
+import OccupationalHealthcareSection from "./occupationalEntryForm";
+import HospitalSection from "./hospitalEntryForm";
+import HealthCheckSection from "./healthCheckEntryForm";
 
-const ITEM_HEIGHT = 28;
-const ITEM_PADDING_TOP = 1;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 10.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
+import { FormLabel, Input, Button, Select, SelectChangeEvent, MenuItem, Checkbox, ListItemText, MenuProps } from "../../ui/index";
+import { toSentenceFromCase } from "../../utils";
 
 interface Props {
   type: EntryType;       
@@ -95,13 +86,13 @@ const EntryForm = ({ type, onSubmit, onCancel, diagnoses }: Props) => {
   return (
     <form
       onSubmit={handleSubmit}
-      style={{ border: "1px solid #ccc", padding: 10, marginTop: 10 }}
+      style={{ border: "1px solid #ccc", padding: 20, marginTop: 5 }}
     >
-      <h3>New {type} Entry</h3>
+      <h3>{toSentenceFromCase(type)} entry</h3>
 
       <div>
-        <label>Description:</label>
-        <input
+        <FormLabel>Description:</FormLabel>
+        <Input
           value={description}
           onChange={e => setDescription(e.target.value)}
           required
@@ -109,8 +100,8 @@ const EntryForm = ({ type, onSubmit, onCancel, diagnoses }: Props) => {
       </div>
 
       <div>
-        <label>Date:</label>
-        <input
+        <FormLabel>Date:</FormLabel>
+        <Input
           type="date"
           value={date}
           onChange={e => setDate(e.target.value)}
@@ -119,8 +110,8 @@ const EntryForm = ({ type, onSubmit, onCancel, diagnoses }: Props) => {
       </div>
 
       <div>
-        <label>Specialist:</label>
-        <input
+        <FormLabel>Specialist:</FormLabel>
+        <Input
           value={specialist}
           onChange={e => setSpecialist(e.target.value)}
           required
@@ -128,7 +119,7 @@ const EntryForm = ({ type, onSubmit, onCancel, diagnoses }: Props) => {
       </div>
 
       <div>
-        <label>Diagnosis:</label>
+        <FormLabel>Diagnosis:</FormLabel>
         <Select
           multiple
           size="small"
@@ -149,82 +140,39 @@ const EntryForm = ({ type, onSubmit, onCancel, diagnoses }: Props) => {
 
 
       {type === EntryType.HealthCheck && (
-        <div>
-          <label>Health Check Rating (0–3):</label>
-          <input
-            type="number"
-            min={0}
-            max={3}
-            value={healthCheckRating}
-            onChange={e =>
-              setHealthCheckRating(Number(e.target.value) as HealthCheckRating)
-            }
-            required
-          />
-        </div>
+        <HealthCheckSection
+          healthCheckRating={healthCheckRating}
+          onRatingChange={setHealthCheckRating}
+        />
       )}
+
 
       {type === EntryType.OccupationalHealthcare && (
-        <>
-          <div>
-            <label>Employer name:</label>
-            <input
-              value={employerName}
-              onChange={e => setEmployerName(e.target.value)}
-              required
-            />
-          </div>
-
-          <h4>Sick Leave (optional)</h4>
-          <div>
-            <label>Start:</label>
-            <input
-              type="date"
-              value={sickLeaveStart}
-              onChange={e => setSickLeaveStart(e.target.value)}
-            />
-          </div>
-
-          <div>
-            <label>End:</label>
-            <input
-              type="date"
-              value={sickLeaveEnd}
-              onChange={e => setSickLeaveEnd(e.target.value)}
-            />
-          </div>
-        </>
+        <OccupationalHealthcareSection
+          employerName={employerName}
+          sickLeaveStart={sickLeaveStart}
+          sickLeaveEnd={sickLeaveEnd}
+          onEmployerChange={setEmployerName}
+          onSickLeaveStartChange={setSickLeaveStart}
+          onSickLeaveEndChange={setSickLeaveEnd}
+        />
       )}
+
 
       {type === EntryType.Hospital && (
-        <>
-          <h4>Discharge</h4>
-          <div>
-            <label>Date:</label>
-            <input
-              type="date"
-              value={dischargeDate}
-              onChange={e => setDischargeDate(e.target.value)}
-              required
-            />
-          </div>
-
-          <div>
-            <label>Criteria:</label>
-            <input
-              value={dischargeCriteria}
-              onChange={e => setDischargeCriteria(e.target.value)}
-              required
-            />
-          </div>
-        </>
+        <HospitalSection
+          dischargeDate={dischargeDate}
+          dischargeCriteria={dischargeCriteria}
+          onDischargeDateChange={setDischargeDate}
+          onDischargeCriteriaChange={setDischargeCriteria}
+        />
       )}
 
+      <div style={{ marginTop: 25, display: "flex", gap: "10px" }}>
+        <Button type="submit" variant="contained" color="success">Submit</Button>
+        <Button type="button" onClick={onCancel} variant="contained" color="error">Cancel</Button>
+      </div>
 
-      <button type="submit">Submit</button>
-      <button type="button" onClick={onCancel}>
-        Cancel
-      </button>
     </form>
   );
 };

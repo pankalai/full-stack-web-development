@@ -7,8 +7,11 @@ import EntryDetails from "./entryDetails";
 import EntryForm from "../AddEntryForm";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
-import { Button } from "@mui/material";
+import PersonIcon from '@mui/icons-material/Person';
 import axios from "axios";
+
+import { Button } from "../../ui/index";
+
 
 interface BackendError {
   code: string;
@@ -103,24 +106,24 @@ const PatientPage = () => {
   return (
     <div>
       <h2>
-        {patient.name} {patient.gender === Gender.Male ? <MaleIcon /> : <FemaleIcon />}
+        {patient.name} {patient.gender === Gender.Male ? <MaleIcon /> : patient.gender === Gender.Female ? <FemaleIcon /> : <PersonIcon />}
       </h2>
       <div>SSN: {patient.ssn}</div>
       <div>Occupation: {patient.occupation}</div>
-
       <div style={{ margin: "16px 0" }}>
         {activeForm === null && (
           <div>
+            <h3>Add new entry</h3>
             <Button variant="contained" color="primary" onClick={() => setActiveForm("healthcheck")}>
-              HealthCheck Entry
+              HealthCheck
             </Button>
             &nbsp;
             <Button variant="contained" color="primary" onClick={() => setActiveForm("occupational")}>
-              Occupational Entry
+              Occupational
             </Button>
             &nbsp;
             <Button variant="contained" color="primary" onClick={() => setActiveForm("hospital")}>
-              Hospital Entry
+              Hospital
             </Button>
           </div>
         )}
@@ -161,5 +164,6 @@ const PatientPage = () => {
     </div>
   );
 };
+
 
 export default PatientPage;
